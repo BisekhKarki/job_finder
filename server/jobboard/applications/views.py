@@ -176,7 +176,7 @@ def update_application_status(request, slug,application_slug):
         )
     application.status = new_status
     application.save()
-    send_email_to_user(application=application)
+    send_email_to_user_async(application=application)
     serializer = ApplicationSerializer(application)
     return Response({'message':'application status updated', 'application':serializer.data},status=status.HTTP_200_OK)
 
@@ -238,13 +238,13 @@ def send_email_to_user(application):
 
 
 
-# def send_email_to_user_async(application):
-#     def task():
-#         try:
-#             send_email_to_user(application)
-#         except Exception as e:
-#             print("Email failed:", e)
+def send_email_to_user_async(application):
+    def task():
+        try:
+            send_email_to_user(application)
+        except Exception as e:
+            print("Email failed:", e)
 
-#     threading.Thread(target=task, daemon=True).start()
+    threading.Thread(target=task, daemon=True).start()
 
 
