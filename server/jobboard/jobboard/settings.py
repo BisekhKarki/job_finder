@@ -150,7 +150,7 @@ CORS_ALLOW_ALL_ORIGINS = False
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
     "http://localhost:5173",
-    "https://your-frontend.vercel.app"
+   "https://job-finder-frontend-git-main-bisekhkarkis-projects.vercel.app"
 ]
 
 CORS_ALLOW_HEADERS = [
