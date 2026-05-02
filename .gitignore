@@ -1,0 +1,15 @@
+# Backend
+server/env/
+server/jobboard/.env
+server/jobboard/media/
+server/db.sqlite3
+
+# Frontend
+frontend/node_modules/
+frontend/.next/
+frontend/.env
+
+# General
+.vscode/
+.DS_Store
+Thumbs.db

@@ -1,0 +1,424 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Application Update</title>
+    <style>
+      body {
+        font-family:
+          -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+          "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+          sans-serif;
+        background-color: #f8fafc;
+        margin: 0;
+        padding: 20px;
+        line-height: 1.6;
+        color: #1e293b;
+      }
+
+      .email-container {
+        max-width: 600px;
+        margin: 0 auto;
+        background: #ffffff;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.07);
+      }
+
+      .header {
+        padding: 40px 30px;
+        text-align: center;
+        font-size: 28px;
+        font-weight: 700;
+        color: #ffffff;
+      }
+
+      .header.shortlisted {
+        background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+      }
+
+      .header.interviewing {
+        background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+      }
+
+      .header.hired {
+        background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+      }
+
+      .header.rejected {
+        background: linear-gradient(135deg, #64748b 0%, #475569 100%);
+      }
+
+      .emoji {
+        font-size: 48px;
+        display: block;
+        margin-bottom: 10px;
+      }
+
+      .content {
+        padding: 40px 30px;
+      }
+
+      .greeting {
+        font-size: 16px;
+        color: #475569;
+        margin-bottom: 24px;
+      }
+
+      .greeting strong {
+        color: #1e293b;
+        font-weight: 600;
+      }
+
+      .message-title {
+        font-size: 22px;
+        font-weight: 700;
+        margin: 20px 0 16px 0;
+        color: #1e293b;
+      }
+
+      .message-title.shortlisted {
+        color: #10b981;
+      }
+
+      .message-title.interviewing {
+        color: #3b82f6;
+      }
+
+      .message-title.hired {
+        color: #10b981;
+      }
+
+      .message-title.rejected {
+        color: #64748b;
+      }
+
+      .message-text {
+        font-size: 15px;
+        color: #475569;
+        line-height: 1.7;
+        margin-bottom: 24px;
+      }
+
+      .job-detail {
+        background: #f1f5f9;
+        border-left: 4px solid #3b82f6;
+        padding: 16px;
+        border-radius: 6px;
+        margin: 24px 0;
+      }
+
+      .job-title {
+        font-weight: 600;
+        color: #1e293b;
+        font-size: 16px;
+      }
+
+      .company-name {
+        color: #64748b;
+        font-size: 14px;
+        margin-top: 4px;
+      }
+
+      .cta-section {
+        margin: 32px 0;
+        text-align: center;
+      }
+
+      .cta-button {
+        display: inline-block;
+        padding: 12px 32px;
+        background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+        color: #ffffff;
+        text-decoration: none;
+        border-radius: 6px;
+        font-weight: 600;
+        font-size: 15px;
+        transition:
+          transform 0.2s,
+          box-shadow 0.2s;
+      }
+
+      .cta-button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 12px rgba(59, 130, 246, 0.3);
+      }
+
+      .cta-button.secondary {
+        background: linear-gradient(135deg, #8b5cf6 0%, #6d28d9 100%);
+      }
+
+      .footer {
+        background: #f8fafc;
+        padding: 24px 30px;
+        text-align: center;
+        border-top: 1px solid #e2e8f0;
+      }
+
+      .footer-text {
+        font-size: 13px;
+        color: #64748b;
+        margin: 0;
+      }
+
+      .signature {
+        font-weight: 600;
+        color: #1e293b;
+        margin-top: 8px;
+      }
+
+      .divider {
+        height: 1px;
+        background: #e2e8f0;
+        margin: 24px 0;
+      }
+
+      .status-badge {
+        display: inline-block;
+        padding: 6px 12px;
+        background: #dbeafe;
+        color: #1e40af;
+        border-radius: 4px;
+        font-size: 12px;
+        font-weight: 600;
+        margin-top: 16px;
+      }
+
+      .status-badge.shortlisted {
+        background: #dcfce7;
+        color: #166534;
+      }
+
+      .status-badge.interviewing {
+        background: #dbeafe;
+        color: #1e40af;
+      }
+
+      .status-badge.hired {
+        background: #dcfce7;
+        color: #166534;
+      }
+
+      .status-badge.rejected {
+        background: #f1f5f9;
+        color: #334155;
+      }
+
+      .next-steps {
+        background: #fef3c7;
+        border-left: 4px solid #f59e0b;
+        padding: 16px;
+        border-radius: 6px;
+        margin: 24px 0;
+      }
+
+      .next-steps-title {
+        font-weight: 600;
+        color: #92400e;
+        margin-bottom: 8px;
+      }
+
+      .next-steps-text {
+        font-size: 14px;
+        color: #b45309;
+        line-height: 1.6;
+      }
+
+      @media (max-width: 600px) {
+        .content {
+          padding: 24px 20px;
+        }
+
+        .header {
+          padding: 30px 20px;
+          font-size: 24px;
+        }
+
+        .emoji {
+          font-size: 40px;
+        }
+
+        .message-title {
+          font-size: 18px;
+        }
+
+        .cta-button {
+          display: block;
+          width: 100%;
+          box-sizing: border-box;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="email-container">
+      <!-- HEADER -->
+      <div
+        class="header {% if status == 'shortlisted' %}shortlisted{% elif status == 'interviewing' %}interviewing{% elif status == 'hired' %}hired{% else %}rejected{% endif %}"
+      >
+        {% if status == "shortlisted" %}
+        <span class="emoji">🎉</span>
+        You've Been Shortlisted! {% elif status == "interviewing" %}
+        <span class="emoji">📅</span>
+        Interview Invitation {% elif status == "hired" %}
+        <span class="emoji">🚀</span>
+        Welcome Aboard! {% elif status == "rejected" %}
+        <span class="emoji">💌</span>
+        Application Update {% endif %}
+      </div>
+
+      <!-- CONTENT -->
+      <div class="content">
+        <p class="greeting">Hi <strong>{{ username }}</strong>,</p>
+
+        <!-- STATUS SPECIFIC MESSAGES -->
+        {% if status == "shortlisted" %}
+
+        <p class="message-text">
+          Congratulations! 🎊 We're thrilled to inform you that you've been
+          shortlisted for the following position:
+        </p>
+
+        <div class="job-detail">
+          <div class="job-title">{{ job_title }}</div>
+          <div class="company-name">at {{ company_name }}</div>
+        </div>
+
+        <p class="message-text">
+          Your application stood out to us, and we'd love to learn more about
+          your qualifications and experience. This is an exciting opportunity to
+          take the next step in your career with us.
+        </p>
+
+        <div class="next-steps">
+          <div class="next-steps-title">What's Next?</div>
+          <div class="next-steps-text">
+            Our recruitment team will be in touch shortly with details about the
+            next round of interviews. Keep an eye on your email!
+          </div>
+        </div>
+        <!-- 
+        <div class="cta-section">
+          <a href="{{ application_link }}" class="cta-button">
+            View Your Application
+          </a>
+        </div> -->
+
+        {% elif status == "interviewing" %}
+
+        <p class="message-text">
+          Excellent news! We're impressed with your application and would like
+          to invite you to interview for the position of:
+        </p>
+
+        <div class="job-detail">
+          <div class="job-title">{{ job_title }}</div>
+          <div class="company-name">at {{ company_name }}</div>
+        </div>
+
+        <p class="message-text">
+          This is a great opportunity to discuss how your skills and experience
+          align with our team. We're excited to meet you!
+        </p>
+
+        <div class="next-steps">
+          <div class="next-steps-title">Interview Details</div>
+          <div class="next-steps-text">
+            Our recruitment team will contact you within the next 24-48 hours
+            with interview details, including date, time, and format (phone,
+            video, or in-person).
+          </div>
+        </div>
+
+        <!-- <div class="cta-section">
+          <a href="{{ application_link }}" class="cta-button">
+            View Interview Details
+          </a>
+        </div> -->
+
+        {% elif status == "hired" %}
+
+        <p class="message-text">
+          We are absolutely delighted to offer you the position of:
+        </p>
+
+        <div class="job-detail">
+          <div class="job-title">{{ job_title }}</div>
+          <div class="company-name">at {{ company_name }}</div>
+        </div>
+
+        <p class="message-text">
+          Your skills, experience, and enthusiasm made a lasting impression on
+          our team. We believe you'll be a valuable addition and we're excited
+          to have you join us!
+        </p>
+
+        <div class="next-steps">
+          <div class="next-steps-title">What Happens Now?</div>
+          <div class="next-steps-text">
+            Our HR team will reach out shortly with details about your
+            onboarding process, start date, compensation package, and any other
+            information you need. Welcome to the team!
+          </div>
+        </div>
+        <!-- 
+        <div class="cta-section">
+          <a href="{{ offer_letter_link }}" class="cta-button">
+            Download Your Offer Letter
+          </a>
+        </div> -->
+
+        {% elif status == "rejected" %}
+
+        <p class="message-text">
+          Thank you for taking the time to apply for the position of:
+        </p>
+
+        <div class="job-detail">
+          <div class="job-title">{{ job_title }}</div>
+          <div class="company-name">at {{ company_name }}</div>
+        </div>
+
+        <p class="message-text">
+          We appreciate your interest in joining our team. After careful
+          consideration, we've decided to move forward with other candidates
+          whose experience more closely matched our current needs. This wasn't
+          an easy decision, as we received many strong applications.
+        </p>
+
+        <p class="message-text">
+          We encourage you to apply for future positions that align with your
+          skills and career goals. We'd love to stay in touch and watch your
+          professional growth!
+        </p>
+        <!-- 
+        <div class="cta-section">
+          <a href="{{ view_jobs_link }}" class="cta-button secondary">
+            Explore Other Opportunities
+          </a>
+        </div> -->
+
+        {% endif %}
+
+        <div class="divider"></div>
+
+        <p class="message-text" style="font-size: 14px; color: #64748b">
+          If you have any questions or need assistance, feel free to reach out
+          to our recruitment team. We're here to help!
+        </p>
+      </div>
+
+      <!-- FOOTER -->
+      <div class="footer">
+        <p class="footer-text">
+          Best regards,<br />
+          <span class="signature">{{ company_name }} </span>
+        </p>
+        <p class="footer-text" style="margin-top: 16px; font-size: 12px">
+          © {{ current_year }} {{ company_name }}. All rights reserved.
+        </p>
+      </div>
+    </div>
+  </body>
+</html>
