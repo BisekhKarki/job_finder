@@ -40,6 +40,8 @@ const RenderCompanyProfile = () => {
           setCompany(val.company);
           setLoading(false);
           console.log(val);
+        } else {
+          setCompany(null);
         }
       } catch (error) {
         console.log(error);
@@ -58,10 +60,10 @@ const RenderCompanyProfile = () => {
 
   return (
     <>
-      {company && company === null ? (
+      {company === null ? (
         <CreateCompanyProfile />
       ) : (
-        <CompanyProfile company={company} />
+        company && <CompanyProfile company={company} />
       )}
     </>
   );
