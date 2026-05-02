@@ -11,6 +11,7 @@ from jobs.views import IsEmployeeUser
 from django.core.mail import send_mail, EmailMultiAlternatives
 from django.template.loader import render_to_string
 from django.conf import settings
+import threading
 
 
 class IsApplicantUser(BasePermission):
@@ -184,6 +185,7 @@ def update_application_status(request, slug,application_slug):
 
 
 
+
 def send_email_to_user(application):
     user = application.applicant
     job = application.job
@@ -196,7 +198,7 @@ def send_email_to_user(application):
         "status": application.status
     }
 
-    subject_map ={
+    subject_map = {
         "shortlisted": f"You've been shortlisted for {job.title}",
         "interviewing": f"Interview Invitation for {job.title}",
         "hired": f"Congratulations! You're hired 🎉",
@@ -205,26 +207,44 @@ def send_email_to_user(application):
 
     subject = subject_map.get(application.status)
     if not subject:
-        return 
-    html_content = render_to_string("emails/application_status.html", context)
-    text_content = f"""
-    Hi {user.username},
+        return
 
-    Your application status has been updated to {application.status} for {job.title} at {company.company_name}.
-    """
-    email = EmailMultiAlternatives(
-        subject, 
-        text_content, 
-        settings.EMAIL_HOST_USER,
-        [user.email]
-    )
-    email.attach_alternative(html_content, "text/html")
-    email.send()
-    return
+    try:
+        html_content = render_to_string("emails/application_status.html", context)
+
+        text_content = f"""
+        Hi {user.username},
+
+        Your application status has been updated to {application.status}
+        for {job.title} at {company.company_name}.
+        """
+
+        email = EmailMultiAlternatives(
+            subject,
+            text_content,
+            settings.EMAIL_HOST_USER,
+            [user.email]
+        )
+
+        email.attach_alternative(html_content, "text/html")
+        email.send()
+
+    except Exception as e:
+        print("Email failed:", e)
     
 
     
 
 
+
+
+# def send_email_to_user_async(application):
+#     def task():
+#         try:
+#             send_email_to_user(application)
+#         except Exception as e:
+#             print("Email failed:", e)
+
+#     threading.Thread(target=task, daemon=True).start()
 
 
